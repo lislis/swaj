@@ -101,3 +101,35 @@ var loop = function() {
 }
 
 var raf = window.requestAnimationFrame(loop);
+
+
+window.addEventListener('keypress', function(ev) {
+
+  switch(ev.key) {
+    case 'd':
+      angle = -40;
+      break;
+    case 'f':
+      angle = -20;
+      break;
+    case 'g':
+      angle = -5;
+      break;
+    case 'h':
+      angle = 0;
+      break;
+    case 'j':
+      angle = 5;
+      break;
+    case 'k':
+      angle = 20;
+      break;
+    case 'l':
+      angle = 40;
+      break;
+  }
+});
+
+
+
+
