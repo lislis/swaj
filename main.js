@@ -1,22 +1,3 @@
-// decide on position of shark
-// calc projectile trajectory
-// -> from center of shark
-// indicate that somehow
-// AI for beach bar
-// timer
-
-
-// assets
-// Starting Screen / Menu
-// Shark 
-//    normal
-//    spitting
-// Beach Bar
-//    empty
-//    1/4, 1/2, 3/4 and full
-// Humans
-// Ending Screen
-
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -24,7 +5,7 @@ var w = 700;
 var h = 500;
 var globalTime = 0;
 var timer = 0;
-var otime = 0;
+var otime = Date.now();
 var dtime = 0;
 var ntime = 0;
 
@@ -45,18 +26,19 @@ var bhouse = {
   counter: 0
 }
 
+var human = {
+  x: -9,
+  y: -30,
+  w: 18,
+  h: 30,
+  v: 0.003,
+  startTime: null
+}
+
 canvas.width = w;
 canvas.height = h;
 
 var toRadians = Math.PI/180;
-
-// var drawRotation = function(x, y, w, h, angle) {
-//   ctx.save();
-//   // ctx.rotate(angle * toRadians);
-//   ctx.translate(w/2, -h * 2);
-//   ctx.fillRect(x + 45, y, w, h);
-//   ctx.restore();
-// }
 
 var draw = function() {
   ctx.clearRect(0, 0, w, h);
@@ -64,11 +46,19 @@ var draw = function() {
   ctx.save();
   ctx.translate(w/2, h);
   ctx.rotate(angle * toRadians);
-  ctx.fillRect(-shark.w / 2, - shark.h, shark.w, shark.h);
+  ctx.strokeRect(-shark.w / 2, - shark.h, shark.w, shark.h);
+
+  ctx.fillRect( Math.floor(human.x), Math.floor(human.y), human.w, human.h);
+
   ctx.restore();
   // drawRotation(w - 45, h - 120, 90, 120, angle);
 
   ctx.strokeRect(bhouse.x, bhouse.y, bhouse.w, bhouse.h);
+}
+
+var updateHuman = function() {
+  // human.x = human.x + human.v * (globalTime - human.startTime) * Math.cos((angle +90) * toRadians);
+  human.y = human.y - human.v * (globalTime - human.startTime) * Math.sin((angle +90)  * toRadians);
 }
 
 
@@ -83,13 +73,16 @@ var updateBHouse = function() {
 var updateTime = function() {
   ntime = Date.now();
   dtime = ntime - otime;
-  globalTime += ntime - otime;
+  globalTime = globalTime + dtime;
   otime = ntime;
 
   document.getElementById('time').innerHTML = globalTime;
 }
 
 var update = function() {
+  if (human.startTime !== null) {
+    updateHuman();
+  }
   updateTime();
   updateBHouse();
 }
