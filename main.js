@@ -31,8 +31,10 @@ var human = {
   y: -30,
   w: 18,
   h: 30,
-  v: 0.003,
-  startTime: null
+  v: 0.0003,
+  a: angle,
+  startTime: 0,
+  isFlying: false
 }
 
 canvas.width = w;
@@ -57,8 +59,25 @@ var draw = function() {
 }
 
 var updateHuman = function() {
-  // human.x = human.x + human.v * (globalTime - human.startTime) * Math.cos((angle +90) * toRadians);
-  human.y = human.y - human.v * (globalTime - human.startTime) * Math.sin((angle +90)  * toRadians);
+  if (human.isFlying === true) {
+    // human.x = human.x + human.v * (globalTime - human.startTime) * Math.cos((angle +90) * toRadians);
+    human.y = human.y - human.v * (globalTime - human.startTime) * Math.sin((angle +90)  * toRadians);
+    if (human.y < -h) {
+      human.isFlying = false;
+      human.y = -30;
+    }
+  } else {
+    calcHumanInterval();
+  }
+}
+
+var calcHumanInterval = function() {
+  var interval = 2000;
+
+  var hop = globalTime % interval;
+  if (hop <= 50) {
+    human.isFlying = true;
+  }
 }
 
 
