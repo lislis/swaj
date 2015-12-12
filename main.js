@@ -9,6 +9,11 @@ var otime = Date.now();
 var dtime = 0;
 var ntime = 0;
 
+var score = 10;
+var scoreBoard = document.getElementById('score');
+scoreBoard.innerHTML = score;
+
+var gameState = 'play';
 
 var angle = 1;
 
@@ -63,9 +68,7 @@ var updateHuman = function() {
     }
 
     if (human.y > h) {
-      human.isFlying = false;
-      human.y = 0;
-      human.x = shark.x;
+      resetHuman();
     }
   } else {
     calcHumanInterval();
@@ -82,6 +85,12 @@ var calcHumanInterval = function() {
       human.lock = false;
     }
   }
+}
+
+var resetHuman = function() {
+  human.isFlying = false;
+  human.y = 0;
+  human.x = shark.x;
 }
 
 var updateBHouse = function() {
@@ -101,20 +110,30 @@ var updateTime = function() {
 }
 
 var updateCollision = function() {
-  
-  document.getElementById('human').innerHTML = human.x + " " + Math.floor(human.y);
-  document.getElementById('beach').innerHTML = bhouse.x + " " + bhouse.y;
 
-  if (human.y + h < 120) { // y + h
-    console.log('crossed the line');
+  if (human.y > (h - (bhouse.y +  bhouse.h))) {
+    if (human.x > bhouse.x && human.x < bhouse.x + bhouse.w) {
+      resetHuman();
+      score = score -1;
+      scoreBoard.innerHTML = score;
+      if (score <= 0) {
+        gameState = 'party';
+      }
+    }
   }
 }
 
 var update = function() {
-  updateTime();
-  updateHuman();
-  updateBHouse();
-  updateCollision();
+
+  if (gameState === 'play') {
+    updateTime();
+    updateHuman();
+    updateBHouse();
+    updateCollision();
+  }
+  if (gameState === 'party') {
+    document.querySelector('body').innerHTML = "It's a party!";
+  }
 }
 
 var loop = function() {
