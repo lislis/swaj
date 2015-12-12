@@ -14,7 +14,8 @@ var angle = 1;
 
 var shark = {
   w: 90,
-  h: 120
+  h: 120,
+  x: 0
 };
 
 var bhouse = {
@@ -27,14 +28,13 @@ var bhouse = {
 }
 
 var human = {
-  x: -9,
-  y: -30,
+  x: 0,
+  y: 0,
   w: 18,
   h: 30,
-  v: 0.0003,
-  a: angle,
-  startTime: 0,
-  isFlying: false
+  v: 2,
+  isFlying: false,
+  lock: false
 }
 
 canvas.width = w;
@@ -44,27 +44,28 @@ var toRadians = Math.PI/180;
 
 var draw = function() {
   ctx.clearRect(0, 0, w, h);
-
-  ctx.save();
-  ctx.translate(w/2, h);
-  ctx.rotate(angle * toRadians);
-  ctx.strokeRect(-shark.w / 2, - shark.h, shark.w, shark.h);
-
-  ctx.fillRect( Math.floor(human.x), Math.floor(human.y), human.w, human.h);
-
-  ctx.restore();
-  // drawRotation(w - 45, h - 120, 90, 120, angle);
-
+  ctx.strokeRect(shark.x, h - shark.h, shark.w, shark.h);
+  ctx.fillRect(human.x, h -Math.floor(human.y), human.w, human.h);
   ctx.strokeRect(bhouse.x, bhouse.y, bhouse.w, bhouse.h);
 }
 
 var updateHuman = function() {
   if (human.isFlying === true) {
-    // human.x = human.x + human.v * (globalTime - human.startTime) * Math.cos((angle +90) * toRadians);
-    human.y = human.y - human.v * (globalTime - human.startTime) * Math.sin((angle +90)  * toRadians);
-    if (human.y < -h) {
+
+    human.y = human.y + human.v;
+
+    if (human.y > shark.h) {
+      human.lock = true;
+    }
+
+    if (human.lock === false) {
+      human.x = shark.x + shark.w / 2 - human.w / 2;
+    }
+
+    if (human.y > h) {
       human.isFlying = false;
-      human.y = -30;
+      human.y = 0;
+      human.x = shark.x;
     }
   } else {
     calcHumanInterval();
@@ -72,14 +73,16 @@ var updateHuman = function() {
 }
 
 var calcHumanInterval = function() {
-  var interval = 2000;
+  var interval = 1000;
 
   var hop = globalTime % interval;
-  if (hop <= 50) {
-    human.isFlying = true;
+  if (globalTime > 1000) {
+    if (hop <= 100) {
+      human.isFlying = true;
+      human.lock = false;
+    }
   }
 }
-
 
 var updateBHouse = function() {
   if (bhouse.x > w - bhouse.w || bhouse.x < 0) {
@@ -87,7 +90,6 @@ var updateBHouse = function() {
   }
   bhouse.x = bhouse.x + bhouse.s
 }
-
 
 var updateTime = function() {
   ntime = Date.now();
@@ -98,12 +100,21 @@ var updateTime = function() {
   document.getElementById('time').innerHTML = globalTime;
 }
 
-var update = function() {
-  if (human.startTime !== null) {
-    updateHuman();
+var updateCollision = function() {
+  
+  document.getElementById('human').innerHTML = human.x + " " + Math.floor(human.y);
+  document.getElementById('beach').innerHTML = bhouse.x + " " + bhouse.y;
+
+  if (human.y + h < 120) { // y + h
+    console.log('crossed the line');
   }
+}
+
+var update = function() {
   updateTime();
+  updateHuman();
   updateBHouse();
+  updateCollision();
 }
 
 var loop = function() {
@@ -114,30 +125,29 @@ var loop = function() {
 
 var raf = window.requestAnimationFrame(loop);
 
-
 window.addEventListener('keypress', function(ev) {
 
   switch(ev.key) {
     case 'd':
-      angle = -40;
+      shark.x = (w/7) * 0;
       break;
     case 'f':
-      angle = -20;
+      shark.x = (w/7) * 1;
       break;
     case 'g':
-      angle = -5;
+      shark.x = (w/7) * 2;
       break;
     case 'h':
-      angle = 0;
+      shark.x = (w/7) * 3;
       break;
     case 'j':
-      angle = 5;
+      shark.x = (w/7) * 4;
       break;
     case 'k':
-      angle = 20;
+      shark.x = (w/7) * 5;
       break;
     case 'l':
-      angle = 40;
+      shark.x = (w/7) * 6;
       break;
   }
 });
