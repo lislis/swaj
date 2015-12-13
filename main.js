@@ -172,5 +172,37 @@ window.addEventListener('keypress', function(ev) {
 });
 
 
+window.addEventListener('load', function() {   
+  if (navigator.requestMIDIAccess) {
+    // navigtor.
+    navigator.requestMIDIAccess().then(onMIDIInit, onMIDISystemError);
+  } else {
+    alert('Your broswer does not support WebMIDI. You can use the keyboard instead.');
+  }
+});
+
+var keyboard, data;
+
+var midiMessageReceived = function(ev) {
+
+  data = ev.data;
+  console.log(data);
+}
+
+var onMIDIInit = function(midi) {
+
+  for (var input of midi.outputs.values()) {
+    if (input.name === 'LPK25 MIDI 1') {
+      console.log(input);
+      keyboard = input;
+      keyboard.onmidimessage = midiMessageReceived;
+      keyboard.send( [0x90, 3, 32] );
+    }
+  }
+}
 
 
+
+var onMIDISystemError = function(error) {
+  console.log(error);
+}
