@@ -144,64 +144,89 @@ var loop = function() {
 
 var raf = window.requestAnimationFrame(loop);
 
-window.addEventListener('keypress', function(ev) {
 
-  switch(ev.key) {
-    case 'd':
-      shark.x = (w/7) * 0;
-      break;
-    case 'f':
-      shark.x = (w/7) * 1;
-      break;
-    case 'g':
-      shark.x = (w/7) * 2;
-      break;
-    case 'h':
-      shark.x = (w/7) * 3;
-      break;
-    case 'j':
-      shark.x = (w/7) * 4;
-      break;
-    case 'k':
-      shark.x = (w/7) * 5;
-      break;
-    case 'l':
-      shark.x = (w/7) * 6;
-      break;
-  }
-});
+window.addEventListener('load', function() {
 
-
-window.addEventListener('load', function() {   
   if (navigator.requestMIDIAccess) {
-    // navigtor.
     navigator.requestMIDIAccess().then(onMIDIInit, onMIDISystemError);
   } else {
     alert('Your broswer does not support WebMIDI. You can use the keyboard instead.');
+
+    window.addEventListener('keypress', function(ev) {
+      switch(ev.key) {
+        case 'd':
+          shark.x = (w/7) * 0;
+          break;
+        case 'f':
+          shark.x = (w/7) * 1;
+          break;
+        case 'g':
+          shark.x = (w/7) * 2;
+          break;
+        case 'h':
+          shark.x = (w/7) * 3;
+          break;
+        case 'j':
+          shark.x = (w/7) * 4;
+          break;
+        case 'k':
+          shark.x = (w/7) * 5;
+          break;
+        case 'l':
+          shark.x = (w/7) * 6;
+          break;
+      }
+    });
   }
+
+
 });
+
 
 var keyboard, data;
 
 var midiMessageReceived = function(ev) {
 
   data = ev.data;
-  console.log(data);
-}
+  cmd = data[0];
+  note = data[1];
 
-var onMIDIInit = function(midi) {
-
-  for (var input of midi.outputs.values()) {
-    if (input.name === 'LPK25 MIDI 1') {
-      console.log(input);
-      keyboard = input;
-      keyboard.onmidimessage = midiMessageReceived;
-      keyboard.send( [0x90, 3, 32] );
+  if (cmd === 144) {
+    switch(note) {
+      case 53:
+        shark.x = (w/7) * 0;
+        break;
+      case 55:
+        shark.x = (w/7) * 1;
+        break;
+      case 57:
+        shark.x = (w/7) * 2;
+        break;
+      case 59:
+        shark.x = (w/7) * 3;
+        break;
+      case 60:
+        shark.x = (w/7) * 4;
+        break;
+      case 62:
+        shark.x = (w/7) * 5;
+        break;
+      case 64:
+        shark.x = (w/7) * 6;
+        break;
     }
   }
 }
 
-
+var onMIDIInit = function(midi) {
+  for (var input of midi.inputs.values()) {
+    if (input.name === 'LPK25 MIDI 1') {
+      alert(input.name + ' found! Ready to go!');
+      keyboard = input;
+      keyboard.onmidimessage = midiMessageReceived;
+    }
+  }
+}
 
 var onMIDISystemError = function(error) {
   console.log(error);
