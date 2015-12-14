@@ -2,12 +2,14 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var w = 700;
-var h = 500;
+var h = 400;
 var globalTime = 0;
 var timer = 0;
 var otime = Date.now();
 var dtime = 0;
 var ntime = 0;
+var bg = new Image();
+bg.src = 'assets/bg.png';
 
 var score = 10;
 var scoreBoard = document.getElementById('score');
@@ -19,28 +21,50 @@ var angle = 1;
 
 var shark = {
   w: 90,
-  h: 120,
-  x: 0
+  h: 109,
+  x: 0,
+  img: '',
+  img1: new Image(),
+  img2: new Image(),
+  img3: new Image()
 };
+shark.img1.src = 'assets/shark1.png';
+shark.img2.src = 'assets/shark2.png';
+shark.img3.src = 'assets/shark3.png';
+shark.img = shark.img1;
 
 var bhouse = {
-  w: 180,
+  w: 130,
   h: 80,
   x: 0,
   y: 40,
   s: 1,
-  counter: 0
+  counter: 0,
+  img: '',
+  img1: new Image(),
+  img2: new Image(),
+  img3: new Image()
 }
+bhouse.img1.src = 'assets/bhouse1.png';
+bhouse.img2.src = 'assets/bhouse2.png';
+bhouse.img3.src = 'assets/bhouse3.png';
+bhouse.img = bhouse.img1;
 
 var human = {
   x: 0,
   y: 0,
-  w: 18,
-  h: 30,
+  w: 16,
+  h: 28,
   v: 2,
   isFlying: false,
-  lock: false
+  lock: false,
+  img: '',
+  img1: new Image(),
+  img2: new Image()
 }
+human.img1.src = 'assets/human1.png';
+human.img2.src = 'assets/human2.png';
+human.img = human.img1;
 
 canvas.width = w;
 canvas.height = h;
@@ -49,9 +73,12 @@ var toRadians = Math.PI/180;
 
 var draw = function() {
   ctx.clearRect(0, 0, w, h);
-  ctx.strokeRect(shark.x, h - shark.h, shark.w, shark.h);
-  ctx.fillRect(human.x, h -Math.floor(human.y), human.w, human.h);
-  ctx.strokeRect(bhouse.x, bhouse.y, bhouse.w, bhouse.h);
+  ctx.drawImage(bg, 0, 0);
+  ctx.drawImage(shark.img, shark.x, h - shark.h, shark.w, shark.h);
+  ctx.drawImage(bhouse.img, bhouse.x, bhouse.y, bhouse.w, bhouse.h);
+  if (human.y > 70) {
+    ctx.drawImage(human.img, human.x, h -Math.floor(human.y), human.w, human.h);
+  }
 }
 
 var updateHuman = function() {
@@ -91,11 +118,17 @@ var resetHuman = function() {
   human.isFlying = false;
   human.y = 0;
   human.x = shark.x;
+  human.img = human['img' + (Math.floor(Math.random() * 2) + 1)];
 }
 
 var updateBHouse = function() {
   if (bhouse.x > w - bhouse.w || bhouse.x < 0) {
     bhouse.s = bhouse.s * -1
+  }
+  if (score <= 2) {
+    bhouse.img = bhouse.img3;
+  } else if (score <= 6) {
+    bhouse.img = bhouse.img2;
   }
   bhouse.x = bhouse.x + bhouse.s
 }
@@ -105,8 +138,6 @@ var updateTime = function() {
   dtime = ntime - otime;
   globalTime = globalTime + dtime;
   otime = ntime;
-
-  document.getElementById('time').innerHTML = globalTime;
 }
 
 var updateCollision = function() {
@@ -122,11 +153,26 @@ var updateCollision = function() {
     }
   }
 }
+var updateShark = function() {
+  if (human.isFlying) {
+
+    if (human.y <= 70) {
+      shark.img = shark.img2;
+    } else if (human.y > 70 && human.y <= 120) {
+      shark.img = shark.img3;
+    } else {
+      shark.img = shark.img1;
+    }
+  } else {
+    shark.img = shark.img1;
+  }
+}
 
 var update = function() {
 
   if (gameState === 'play') {
     updateTime();
+    updateShark();
     updateHuman();
     updateBHouse();
     updateCollision();
