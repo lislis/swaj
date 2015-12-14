@@ -1,5 +1,4 @@
 
-
 var SWAJ = function() {
 
   var canvas = document.getElementById('canvas');
@@ -194,53 +193,6 @@ var SWAJ = function() {
 
   var raf = window.requestAnimationFrame(loop);
 
-  var keyboard, data;
-
-  var midiMessageReceived = function(ev) {
-
-    data = ev.data;
-    cmd = data[0];
-    note = data[1];
-
-    if (cmd === 144) {
-      switch(note) {
-        case 53:
-          shark.x = (w/7) * 0;
-          break;
-        case 55:
-          shark.x = (w/7) * 1;
-          break;
-        case 57:
-          shark.x = (w/7) * 2;
-          break;
-        case 59:
-          shark.x = (w/7) * 3;
-          break;
-        case 60:
-          shark.x = (w/7) * 4;
-          break;
-        case 62:
-          shark.x = (w/7) * 5;
-          break;
-        case 64:
-          shark.x = (w/7) * 6;
-          break;
-      }
-    }
-  }
-
-  var onMIDIInit = function(midi) {
-    for (var input of midi.inputs.values()) {
-      alert(input.name + ' found! Ready to go!');
-      keyboard = input;
-      keyboard.onmidimessage = midiMessageReceived;
-    }
-  }
-
-  var onMIDISystemError = function(error) {
-    console.log(error);
-  }
-
   if (isMIDI === false) {
     window.addEventListener('keypress', function(ev) {
       switch(ev.key) {
@@ -267,11 +219,40 @@ var SWAJ = function() {
           break;
       }
     });
-  }
+  } else {
 
+    window.addEventListener('keyboard', function(ev) {
+
+      switch(ev.detail) {
+        case 53:
+          shark.x = (w/7) * 0;
+          break;
+        case 55:
+          shark.x = (w/7) * 1;
+          break;
+        case 57:
+          shark.x = (w/7) * 2;
+          break;
+        case 59:
+          shark.x = (w/7) * 3;
+          break;
+        case 60:
+          shark.x = (w/7) * 4;
+          break;
+        case 62:
+          shark.x = (w/7) * 5;
+          break;
+        case 64:
+          shark.x = (w/7) * 6;
+          break;
+      }
+    });
+  }
 }
 
 var isMIDI = false;
+var keyboard, data;
+var keyboardEvent;
 
 document.getElementById('start').addEventListener('click', function() {
   document.querySelector('.intro').classList.remove('is-visible');
@@ -289,3 +270,29 @@ document.getElementById('start').addEventListener('click', function() {
 document.getElementById('restart').addEventListener('click', function() {
   window.location.reload();
 });
+
+var midiMessageReceived = function(ev) {
+
+  data = ev.data;
+  cmd = data[0];
+  note = data[1];
+
+  if (cmd === 144) {
+    keyboardEvent = new CustomEvent('keyboard', {'detail': note});
+    window.dispatchEvent(keyboardEvent);
+  }
+}
+
+var onMIDIInit = function(midi) {
+  for (var input of midi.inputs.values()) {
+    if (input.name !== 'Midi Through Port-0') {
+      alert(input.name + ' found! Ready to go!');
+      keyboard = input;
+      keyboard.onmidimessage = midiMessageReceived;
+    }
+  }
+}
+
+var onMIDISystemError = function(error) {
+  console.log(error);
+}
