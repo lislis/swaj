@@ -4,13 +4,25 @@
     <meta charset="utf-8">
     <title>SWAJ</title>
     <script defer src="main.js"></script>
-
-    <style>
-      canvas {background: cornflowerblue}
-    </style>
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <h1><span id="score"></span> more people to party</h1>
-    <canvas id="canvas"></canvas>
+    <div class="wrapper">
+      <div class="intro stage is-visible">
+        <h1>Swaj</h1>
+        <p>If you watch the movie Jaws backwards, then it's about a shark that spits out people who at one point open a beach bar.</p>
+        <button id="start">click to play</button>
+      </div>
+      <div class="game stage">
+        <h2><span id="score"></span> more people to party</h2>
+        <canvas id="canvas"></canvas>
+        <p>Keyboard: use d, f, g, h, j, k and l</p>
+        <p>MIDI: use 53, 55, 57, 59, 60, 62, 64</p>
+      </div>
+      <div class="done stage">
+        <h1>PARTY TIME!</h1>
+         <button id="restart">click to replay</button>
+      </div>
+    </div>
   </body>
 </html>

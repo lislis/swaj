@@ -1,0 +1,64 @@
+@font-face {
+  font-family: "Amity Jack";
+  src: url('assets/amity-jack.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  font-family: Amity Jack, sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 300;
+}
+
+p {
+  margin: 0 0 .5em;
+}
+
+canvas {
+  box-shadow: 0 0 2px black;
+}
+
+button {
+  border: none;
+  background: none;
+  font-family: Amity Jack;
+  color: cornflowerblue;
+  font-weight: 300;
+  font-size: 30px;
+  padding: 0;
+  cursor: pointer;
+  height: 32px;
+}
+button:hover, button:active {
+  border: solid 2px cornflowerblue;
+  font-size: 28px;
+  border-radius: 5px;
+}
+
+.wrapper {
+}
+
+.stage {
+  display: none;
+}
+.stage.is-visible {
+  display: block;
+}
+
+@media (min-width: 700px) {
+  .wrapper {
+    width: 700px;
+    margin: auto;
+  }
+}
