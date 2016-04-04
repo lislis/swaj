@@ -195,7 +195,7 @@ var SWAJ = function() {
 
   if (isMIDI === false) {
     window.addEventListener('keypress', function(ev) {
-      switch(ev.key) {
+      switch(String.fromCharCode(ev.which)) {
         case 'd':
           shark.x = (w/7) * 0;
           break;
@@ -256,7 +256,7 @@ var keyboardEvent;
 
 document.getElementById('start').addEventListener('click', function() {
   document.querySelector('.intro').classList.remove('is-visible');
-  
+
   if (navigator.requestMIDIAccess) {
     isMIDI = true;
     navigator.requestMIDIAccess().then(onMIDIInit, onMIDISystemError);
