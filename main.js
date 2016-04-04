@@ -79,6 +79,12 @@ var SWAJ = function() {
     ctx.drawImage(shark.img, shark.x, h - shark.h, shark.w, shark.h);
     ctx.drawImage(bhouse.img, bhouse.x, bhouse.y, bhouse.w, bhouse.h);
     if (human.y > 70) {
+
+      if (human.y === 72) {
+        var audio = new Audio('assets/shoot.wav');
+        audio.play();
+      }
+
       ctx.drawImage(human.img, human.x, h -Math.floor(human.y), human.w, human.h);
     }
   }
