@@ -204,24 +204,38 @@ var SWAJ = function() {
       switch(String.fromCharCode(ev.which)) {
         case 'd':
           shark.x = (w/7) * 0;
+          var audio = new Audio('assets/swaj6F.wav');
+          audio.play();
           break;
         case 'f':
           shark.x = (w/7) * 1;
+          var audio = new Audio('assets/swaj6G.wav');
+          audio.play();
           break;
         case 'g':
           shark.x = (w/7) * 2;
+          var audio = new Audio('assets/swaj6A.wav');
+          audio.play();
           break;
         case 'h':
           shark.x = (w/7) * 3;
+          var audio = new Audio('assets/swaj6Bb.wav');
+          audio.play();
           break;
         case 'j':
           shark.x = (w/7) * 4;
+          var audio = new Audio('assets/swaj6C.wav');
+          audio.play();
           break;
         case 'k':
           shark.x = (w/7) * 5;
+          var audio = new Audio('assets/swaj6D.wav');
+          audio.play();
           break;
         case 'l':
           shark.x = (w/7) * 6;
+          var audio = new Audio('assets/swaj6E.wav');
+          audio.play();
           break;
       }
     });
@@ -232,24 +246,38 @@ var SWAJ = function() {
       switch(ev.detail) {
         case 53:
           shark.x = (w/7) * 0;
+          var audio = new Audio('assets/swaj6F.wav');
+          audio.play();
           break;
         case 55:
           shark.x = (w/7) * 1;
+          var audio = new Audio('assets/swaj6G.wav');
+          audio.play();
           break;
         case 57:
           shark.x = (w/7) * 2;
+          var audio = new Audio('assets/swaj6A.wav');
+          audio.play();
           break;
         case 59:
           shark.x = (w/7) * 3;
+          var audio = new Audio('assets/swaj6Bb.wav');
+          audio.play();
           break;
         case 60:
           shark.x = (w/7) * 4;
+          var audio = new Audio('assets/swaj6C.wav');
+          audio.play();
           break;
         case 62:
           shark.x = (w/7) * 5;
+          var audio = new Audio('assets/swaj6D.wav');
+          audio.play();
           break;
         case 64:
           shark.x = (w/7) * 6;
+          var audio = new Audio('assets/swaj6E.wav');
+          audio.play();
           break;
       }
     });
